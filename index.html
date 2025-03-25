@@ -13,7 +13,7 @@
             <div class="profile-card">
                 <div class="profile-header">
                     <div class="profile-img">
-                        <img id="profile-picture" src="./default-pfp-2.jpg" alt="Profile Picture">
+                        <img id="profile-picture" src="https://a.gbp.workers.dev/default-pfp-2.jpg" alt="Profile Picture">
                     </div>
                     <div class="profile-info">
                         <h1 id="name">Loading...</h1>
@@ -89,7 +89,7 @@
                             <label for="edit-profile-pic">Profile Picture URL</label>
                             <input type="text" id="edit-profile-pic" placeholder="URL to your profile picture">
                             <div class="url-preview">
-                                <img id="pic-preview" src="./default-pfp-2.jpg" alt="Preview">
+                                <img id="pic-preview" src="https://a.gbp.workers.dev/default-pfp-2.jpg" alt="Preview">
                             </div>
                         </div>
                         <div class="form-group">
@@ -205,7 +205,7 @@
         
             document.getElementById('name').textContent = userData.name;
             document.getElementById('username').textContent = "@"+ window.usernamex;
-            document.getElementById('profile-picture').src = userData.profilePictureUrl || "./default-pfp-2.jpg";
+            document.getElementById('profile-picture').src = userData.profilePictureUrl || "https://a.gbp.workers.dev/default-pfp-2.jpg";
             document.getElementById('bio').textContent = userData.bio || "No bio available.";
         
             if (userData.themeColors) {
@@ -289,7 +289,7 @@
         
             document.getElementById('name').textContent = "User Not Found";
             document.getElementById('username').textContent = "";
-            document.getElementById('profile-picture').src = "/default-pfp-2.jpg";
+            document.getElementById('profile-picture').src = "https://a.gbp.workers.dev/default-pfp-2.jpg";
         
             document.documentElement.style.setProperty('--accent-color', '#888');
             document.documentElement.style.setProperty('--accent-light', '#e8e8e8');
@@ -400,7 +400,7 @@
         function populateEditForm(userData) {
             document.getElementById('edit-name').value = userData.name || '';
             document.getElementById('edit-profile-pic').value = userData.profilePictureUrl || '';
-            document.getElementById('pic-preview').src = userData.profilePictureUrl || './default-pfp-2.jpg';
+            document.getElementById('pic-preview').src = userData.profilePictureUrl || 'https://a.gbp.workers.dev/default-pfp-2.jpg';
             document.getElementById('edit-bio').value = userData.bio || '';
             document.getElementById('edit-bg-image').value = userData.backgroundImage || '';
             
@@ -435,13 +435,13 @@
                 if (url) {
                     preview.src = url;
                 } else {
-                    preview.src = './default-pfp-2.jpg';
+                    preview.src = 'https://a.gbp.workers.dev/default-pfp-2.jpg';
                 }
             });
             
             // Handle profile picture loading errors
             document.getElementById('pic-preview').addEventListener('error', function() {
-                this.src = './default-pfp-2.jpg';
+                this.src = 'https://a.gbp.workers.dev/default-pfp-2.jpg';
                 document.getElementById('edit-profile-error').textContent = 'Invalid profile picture URL';
                 document.getElementById('edit-profile-error').style.display = 'block';
                 setTimeout(() => {
@@ -623,7 +623,7 @@
         
         function setupProfilePictureErrorHandler() {
             document.getElementById('profile-picture').onerror = function() {
-                this.src = "./default-pfp-2.jpg";
+                this.src = "https://a.gbp.workers.dev/default-pfp-2.jpg";
             };
         }
         
