@@ -178,7 +178,7 @@
             document.getElementById('edit-username').textContent = username;
             if (username) {
                 try {
-                    const response = await fetch("/silly/" + username);
+                    const response = await fetch("https://a.gbp.workers.dev/silly/" + username);
                     if (!response.ok) throw new Error('User not found');
         
                     const userData = await response.json();
@@ -352,7 +352,7 @@
             }
         
             try {
-                const response = await fetch('/sillyness/' + username, {
+                const response = await fetch('https://a.gbp.workers.dev/sillyness/' + username, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, editCode })
@@ -572,7 +572,7 @@
             };
             
             try {
-                const response = await fetch('/sillyness/' + username, {
+                const response = await fetch('https://a.gbp.workers.dev/sillyness/' + username, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(profileData)
