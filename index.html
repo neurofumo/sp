@@ -1,0 +1,661 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>sillyprofiles</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/color-picker-element@latest/dist/colorPicker.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/color-picker-element@latest/dist/colorPicker.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-img">
+                        <img id="profile-picture" src="./default-pfp-2.jpg" alt="Profile Picture">
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="name">Loading...</h1>
+                        <p id="username"></p>
+                    </div>
+                </div>
+                
+                <div class="profile-bio">
+                    <h2>Bio</h2>
+                    <p id="bio"></p>
+                </div>
+                <div class="profile-links">
+                    <h2>Links & Socials</h2>
+                    <ul id="socials-list">
+                        <!-- Socials will be populated here by JavaScript -->
+                    </ul>
+                </div>
+                <div class="profile-footer">
+                    <a href="#" data-target="options-callout">Options</a>
+                    <a href="#" data-target="edit-callout">Edit Profile</a>
+                    <a href="#" data-target="about-callout">About</a>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Overlay for callouts -->
+        <div class="overlay"></div>
+    
+        <!-- Callout windows -->
+        <div id="options-callout" class="callout">
+            <div class="callout-header">
+                <h3>Options</h3>
+                <button class="callout-close">&times;</button>
+            </div>
+            <div class="callout-content">
+                <div class="options-setting">
+                    <label for="dark-mode-toggle">Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    
+        <div id="edit-callout" class="callout">
+            <div class="callout-header">
+                <h3>Edit Profile</h3>
+                <button class="callout-close">&times;</button>
+            </div>
+            <div class="callout-content">
+                <form id="login-form">
+                    <div class="form-group">
+                        <p>To edit or register as <span id="edit-username"></span>, enter edit code.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-code">Edit Code</label>
+                        <input type="password" id="edit-code" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                    <div id="login-error" class="login-error"></div>
+                </form>
+                
+                <!-- Profile Edit Form (initially hidden) -->
+                <form id="edit-profile-form" style="display: none;">
+                    <div class="category-section">
+                        <h3>Profile Information</h3>
+                        <div class="form-group">
+                            <label for="edit-name">Name</label>
+                            <input type="text" id="edit-name" placeholder="Your display name">
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-profile-pic">Profile Picture URL</label>
+                            <input type="text" id="edit-profile-pic" placeholder="URL to your profile picture">
+                            <div class="url-preview">
+                                <img id="pic-preview" src="./default-pfp-2.jpg" alt="Preview">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-bio">Bio</label>
+                            <textarea id="edit-bio" rows="4" placeholder="Tell the world about yourself"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="category-section">
+                        <h3>Appearance</h3>
+                        <div class="form-group">
+                            <label for="edit-bg-image">Background Image URL (optional)</label>
+                            <input type="text" id="edit-bg-image" placeholder="URL to your background image">
+                        </div>
+                        <div class="form-group theme-colors">
+                            <label>Theme Colors</label>
+                            <div class="color-grid">
+                                <div class="color-item">
+                                    <label for="accent-color">Accent</label>
+                                    <input type="color" id="accent-color" value="#0084b4">
+                                </div>
+                                <div class="color-item">
+                                    <label for="accent-light">Light Accent</label>
+                                    <input type="color" id="accent-light" value="#d6effc">
+                                </div>
+                                <div class="color-item">
+                                    <label for="accent-dark">Dark Accent</label>
+                                    <input type="color" id="accent-dark" value="#00719b">
+                                </div>
+                                <div class="color-item">
+                                    <label for="text-on-accent">Text on Accent</label>
+                                    <input type="color" id="text-on-accent" value="#3d6a84">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-section">
+                        <h3>Social Links</h3>
+                        <div class="socials-table">
+                            <table id="socials-table">
+                                <thead>
+                                    <tr>
+                                        <th>Platform</th>
+                                        <th>URL</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="socials-tbody">
+                                    <!-- Social links will be added here -->
+                                </tbody>
+                            </table>
+                            <button type="button" id="add-social" class="add-social-btn">+ Add Social Link</button>
+                        </div>
+                    </div>
+                    <div id="edit-profile-error" class="login-error"></div>
+                    <button type="submit" class="login-button">Save Profile</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="about-callout" class="callout">
+            <div class="callout-header">
+                <h3>About</h3>
+                <button class="callout-close">&times;</button>
+            </div>
+            <div class="callout-content">
+                <h4 class="about-title">Welcome to <span class="highlight">sillyprofiles</span>!</h4>
+                <p class="about-text">A simple profile page that is <span class="sparkle">simple</span> and <span class="safe">safe</span> to view for everyone. This page is under construction.</p>
+                <div class="separator"></div>
+                <p class="about-text notice">We have no CDN or image storage system setup so if you end up getting a profile here, please use links for your images. Such as <a href="https://imgur.com/" target="_blank">imgur</a>, <a href="https://imgbb.com/" target="_blank">imgbb</a>, or <a href="https://catbox.moe/" target="_blank">catbox</a>!</p>
+            </div>
+        </div>
+        <script>
+        // Default theme colors
+        const defaultTheme = {
+            accent: "#0084b4",
+            accentLight: "#d6effc",
+            accentDark: "#00719b",
+            textOnAccent: "#3d6a84"
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            let username = window.location.pathname.substring(1);
+            window.usernamex = username; // Store globally
+            document.getElementById('edit-username').textContent = username;
+            if (username) {
+                try {
+                    const response = await fetch("/silly/" + username);
+                    if (!response.ok) throw new Error('User not found');
+        
+                    const userData = await response.json();
+                    window.userData = userData; // Store user data globally
+                    displayUserProfile(userData);
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    displayNotFoundState();
+                }
+            } else {
+                displayNotFoundState();
+            }
+        
+            setupProfilePictureErrorHandler();
+            setupFooterLinks();
+            setupProfileEditor();
+            
+            // Setup color inputs to update the UI in real-time
+            setupColorPreviews();
+        });
+        
+        function displayUserProfile(userData) {
+            document.body.classList.add('content-loaded');
+        
+            document.getElementById('name').textContent = userData.name;
+            document.getElementById('username').textContent = "@"+ window.usernamex;
+            document.getElementById('profile-picture').src = userData.profilePictureUrl || "./default-pfp-2.jpg";
+            document.getElementById('bio').textContent = userData.bio || "No bio available.";
+        
+            if (userData.themeColors) {
+                updateThemeColors(userData.themeColors);
+            }
+        
+            if (userData.backgroundImage) {
+                document.body.style.backgroundImage = "url(" + userData.backgroundImage + ")";
+            }
+        
+            const socialsList = document.getElementById('socials-list');
+            socialsList.innerHTML = ''; // Clear existing content
+            userData.socials.forEach(social => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = social.url;
+                a.target = '_blank';
+        
+                const icon = document.createElement('i');
+                icon.className = getSocialIconClass(social.platform);
+                
+                a.appendChild(icon);
+                a.appendChild(document.createTextNode(' ' + social.platform));
+                li.appendChild(a);
+                socialsList.appendChild(li);
+            });
+        }
+        
+        function updateThemeColors(colors) {
+            document.documentElement.style.setProperty('--accent-color', colors.accent);
+            document.documentElement.style.setProperty('--accent-light', colors.accentLight);
+            document.documentElement.style.setProperty('--accent-dark', colors.accentDark);
+            document.documentElement.style.setProperty('--text-on-accent', colors.textOnAccent);
+            
+            // Adjust text color based on background brightness
+            const accentLightBrightness = getBrightness(colors.accentLight);
+            const textColorForLight = accentLightBrightness > 160 ? '#333333' : '#ffffff';
+            document.documentElement.style.setProperty('--text-on-accent-light', textColorForLight);
+            
+            // Update UI elements with adjusted colors
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            if (isDarkMode) {
+                // Apply darker variants for dark mode
+                document.documentElement.style.setProperty('--dark-mode-accent', adjustColorBrightness(colors.accent, -20));
+                document.documentElement.style.setProperty('--dark-mode-accent-light', adjustColorBrightness(colors.accentLight, -80));
+            }
+        }
+        
+        function getBrightness(hexColor) {
+            // Convert hex to RGB
+            hexColor = hexColor.replace('#', '');
+            const r = parseInt(hexColor.substr(0, 2), 16);
+            const g = parseInt(hexColor.substr(2, 2), 16);
+            const b = parseInt(hexColor.substr(4, 2), 16);
+            
+            // Calculate brightness (perceived luminance)
+            return (r * 299 + g * 587 + b * 114) / 1000;
+        }
+        
+        function adjustColorBrightness(hexColor, percent) {
+            // Convert hex to RGB
+            hexColor = hexColor.replace('#', '');
+            const r = parseInt(hexColor.substr(0, 2), 16);
+            const g = parseInt(hexColor.substr(2, 2), 16);
+            const b = parseInt(hexColor.substr(4, 2), 16);
+            
+            // Adjust brightness
+            const adjustR = Math.max(0, Math.min(255, r + (r * percent / 100)));
+            const adjustG = Math.max(0, Math.min(255, g + (g * percent / 100)));
+            const adjustB = Math.max(0, Math.min(255, b + (b * percent / 100)));
+            
+            // Convert back to hex
+            return '#' + 
+                Math.round(adjustR).toString(16).padStart(2, '0') +
+                Math.round(adjustG).toString(16).padStart(2, '0') +
+                Math.round(adjustB).toString(16).padStart(2, '0');
+        }
+        
+        function displayNotFoundState() {
+            document.body.classList.add('content-loaded', 'not-found', 'not-found-theme');
+        
+            document.getElementById('name').textContent = "User Not Found";
+            document.getElementById('username').textContent = "";
+            document.getElementById('profile-picture').src = "/default-pfp-2.jpg";
+        
+            document.documentElement.style.setProperty('--accent-color', '#888');
+            document.documentElement.style.setProperty('--accent-light', '#e8e8e8');
+            document.documentElement.style.setProperty('--accent-dark', '#666');
+            document.documentElement.style.setProperty('--text-on-accent', '#777');
+            document.documentElement.style.setProperty('--text-on-accent-light', '#333333');
+        }
+        
+        function setupFooterLinks() {
+            const overlay = document.querySelector('.overlay');
+            
+            document.querySelectorAll('.profile-footer a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const callout = document.getElementById(e.target.getAttribute('data-target'));
+                    if (callout) {
+                        callout.classList.add('active');
+                        overlay.classList.add('active');
+                    }
+                });
+            });
+        
+            overlay.addEventListener('click', closeCallouts);
+            document.querySelectorAll('.callout-close').forEach(button => button.addEventListener('click', closeCallouts));
+        
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await validateEditCode();
+            });
+        
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+                
+                // Update colors for dark mode if user data exists
+                if (window.userData && window.userData.themeColors) {
+                    updateThemeColors(window.userData.themeColors);
+                }
+            }
+        
+            darkModeToggle.addEventListener('change', () => {
+                document.body.classList.toggle('dark-mode', darkModeToggle.checked);
+                localStorage.setItem('darkMode', darkModeToggle.checked ? 'enabled' : 'disabled');
+                
+                // Update theme colors when dark mode changes
+                if (window.userData && window.userData.themeColors) {
+                    updateThemeColors(window.userData.themeColors);
+                }
+            });
+        }
+        
+        async function validateEditCode() {
+            const username = window.usernamex || '';
+            const editCode = document.getElementById('edit-code').value;
+        
+            if (!editCode) {
+                showLoginError('Please enter your edit code');
+                return;
+            }
+        
+            try {
+                const response = await fetch('/sillyness/' + username, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, editCode })
+                });
+        
+                const result = await response.json();
+                if (result.success) {
+                    // Store edit code for later use
+                    localStorage.setItem('sillyEditCode', editCode);
+                    
+                    // Switch to edit mode
+                    document.getElementById('login-form').style.display = 'none';
+                    const editForm = document.getElementById('edit-profile-form');
+                    editForm.style.display = 'block';
+                    
+                    // Populate the edit form with current data
+                    populateEditForm(window.userData || getDefaultUserData());
+                } else {
+                    showLoginError('Invalid edit code');
+                }
+            } catch (error) {
+                console.error('Error validating edit code:', error);
+                showLoginError('Something went wrong');
+            }
+        }
+        
+        function setupColorPreviews() {
+            // Listen for changes to color inputs and update in real-time
+            const colorInputs = document.querySelectorAll('.color-item input[type="color"]');
+            colorInputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const colors = {
+                        accent: document.getElementById('accent-color').value,
+                        accentLight: document.getElementById('accent-light').value,
+                        accentDark: document.getElementById('accent-dark').value,
+                        textOnAccent: document.getElementById('text-on-accent').value
+                    };
+                    
+                    // Apply the colors to see a live preview
+                    updateThemeColors(colors);
+                });
+            });
+        }
+        
+        function populateEditForm(userData) {
+            document.getElementById('edit-name').value = userData.name || '';
+            document.getElementById('edit-profile-pic').value = userData.profilePictureUrl || '';
+            document.getElementById('pic-preview').src = userData.profilePictureUrl || './default-pfp-2.jpg';
+            document.getElementById('edit-bio').value = userData.bio || '';
+            document.getElementById('edit-bg-image').value = userData.backgroundImage || '';
+            
+            // Set theme colors
+            if (userData.themeColors) {
+                document.getElementById('accent-color').value = userData.themeColors.accent;
+                document.getElementById('accent-light').value = userData.themeColors.accentLight;
+                document.getElementById('accent-dark').value = userData.themeColors.accentDark;
+                document.getElementById('text-on-accent').value = userData.themeColors.textOnAccent;
+            }
+            
+            // Clear existing socials
+            const socialsBody = document.getElementById('socials-tbody');
+            socialsBody.innerHTML = '';
+            
+            // Add existing socials
+            if (userData.socials && userData.socials.length) {
+                userData.socials.forEach((social, index) => {
+                    addSocialRow(social.platform, social.url);
+                });
+            } else {
+                // Add an empty row if no socials exist
+                addSocialRow('', '');
+            }
+        }
+        
+        function setupProfileEditor() {
+            // Preview profile picture when URL changes
+            document.getElementById('edit-profile-pic').addEventListener('input', function() {
+                const preview = document.getElementById('pic-preview');
+                const url = this.value.trim();
+                if (url) {
+                    preview.src = url;
+                } else {
+                    preview.src = './default-pfp-2.jpg';
+                }
+            });
+            
+            // Handle profile picture loading errors
+            document.getElementById('pic-preview').addEventListener('error', function() {
+                this.src = './default-pfp-2.jpg';
+                document.getElementById('edit-profile-error').textContent = 'Invalid profile picture URL';
+                document.getElementById('edit-profile-error').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('edit-profile-error').style.display = 'none';
+                }, 3000);
+            });
+            
+            // Add social link button
+            document.getElementById('add-social').addEventListener('click', function() {
+                addSocialRow('', '');
+            });
+            
+            // Submit profile edit form
+            document.getElementById('edit-profile-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await saveProfileChanges();
+            });
+        }
+        
+        function addSocialRow(platform, url) {
+            const tbody = document.getElementById('socials-tbody');
+            const row = document.createElement('tr');
+            
+            // Create platform input
+            const platformCell = document.createElement('td');
+            const platformInput = document.createElement('input');
+            platformInput.type = 'text';
+            platformInput.className = 'social-platform';
+            platformInput.value = platform || '';
+            platformInput.placeholder = 'Twitter, GitHub, etc.';
+            platformCell.appendChild(platformInput);
+            
+            // Create URL input
+            const urlCell = document.createElement('td');
+            const urlInput = document.createElement('input');
+            urlInput.type = 'text';
+            urlInput.className = 'social-url';
+            urlInput.value = url || '';
+            urlInput.placeholder = 'https://';
+            urlCell.appendChild(urlInput);
+            
+            // Create action buttons
+            const actionCell = document.createElement('td');
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'delete-social-btn';
+            deleteBtn.innerHTML = '&times;';
+            deleteBtn.addEventListener('click', function() {
+                tbody.removeChild(row);
+            });
+            actionCell.appendChild(deleteBtn);
+            
+            // Add cells to row
+            row.appendChild(platformCell);
+            row.appendChild(urlCell);
+            row.appendChild(actionCell);
+            
+            // Add row to table
+            tbody.appendChild(row);
+        }
+        
+        function validateUrl(url) {
+            if (!url) return true; // Empty URLs are valid (will be ignored)
+            try {
+                new URL(url);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+        
+        async function saveProfileChanges() {
+            const username = window.usernamex;
+            const editCode = localStorage.getItem('sillyEditCode');
+            
+            if (!username || !editCode) {
+                showEditError('Session expired. Please login again.');
+                return;
+            }
+            
+            // Validate profile picture URL
+            const profilePicUrl = document.getElementById('edit-profile-pic').value.trim();
+            if (profilePicUrl && !validateUrl(profilePicUrl)) {
+                showEditError('Invalid profile picture URL');
+                return;
+            }
+            
+            // Validate background image URL
+            const bgImageUrl = document.getElementById('edit-bg-image').value.trim();
+            if (bgImageUrl && !validateUrl(bgImageUrl)) {
+                showEditError('Invalid background image URL');
+                return;
+            }
+            
+            // Collect socials
+            const socials = [];
+            const rows = document.querySelectorAll('#socials-tbody tr');
+            rows.forEach(row => {
+                const platform = row.querySelector('.social-platform').value;
+                const url = row.querySelector('.social-url').value.trim();
+                
+                if (platform && url) {
+                    if (!validateUrl(url)) {
+                        showEditError(`Invalid URL for ${platform}`);
+                        throw new Error('Invalid URL');
+                    }
+                    socials.push({ platform, url });
+                }
+            });
+            
+            // Collect theme colors
+            const themeColors = {
+                accent: document.getElementById('accent-color').value,
+                accentLight: document.getElementById('accent-light').value,
+                accentDark: document.getElementById('accent-dark').value,
+                textOnAccent: document.getElementById('text-on-accent').value
+            };
+            
+            // Collect profile data
+            const profileData = {
+                name: document.getElementById('edit-name').value.trim() || window.userData?.name || username,
+                editCode: editCode,
+                profilePictureUrl: profilePicUrl || 'https://a.gbp.workers.dev/default-pfp-2.jpg',
+                bio: document.getElementById('edit-bio').value.trim() || 'This is a bio',
+                themeColors: themeColors,
+                backgroundImage: bgImageUrl || null,
+                socials: socials
+            };
+            
+            try {
+                const response = await fetch('/sillyness/' + username, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profileData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    // Update page with new data
+                    window.userData = profileData;
+                    displayUserProfile(profileData);
+                    
+                    // Close callout
+                    closeCallouts();
+                    alert('Profile updated successfully!');
+                } else {
+                    showEditError(result.error || 'Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                showEditError('Something went wrong. Please try again.');
+            }
+        }
+        
+        function showEditError(message) {
+            const errorElement = document.getElementById('edit-profile-error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => {
+                errorElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        function getDefaultUserData() {
+            return {
+                name: window.usernamex,
+                profilePictureUrl: 'https://a.gbp.workers.dev/default-pfp-2.jpg',
+                bio: 'This is a bio',
+                themeColors: {
+                    accent: "#0084b4",
+                    accentLight: "#d6effc",
+                    accentDark: "#00719b",
+                    textOnAccent: "#3d6a84"
+                },
+                backgroundImage: null,
+                socials: []
+            };
+        }
+        
+        function setupProfilePictureErrorHandler() {
+            document.getElementById('profile-picture').onerror = function() {
+                this.src = "./default-pfp-2.jpg";
+            };
+        }
+        
+        function closeCallouts() {
+            document.querySelectorAll('.callout.active').forEach(callout => callout.classList.remove('active'));
+            document.querySelector('.overlay').classList.remove('active');
+        }
+        
+        function getSocialIconClass(platform) {
+            const lowerPlatform = platform.toLowerCase();
+            switch (lowerPlatform) {
+                case 'twitter': return 'fab fa-twitter';
+                case 'instagram': return 'fab fa-instagram';
+                case 'facebook': return 'fab fa-facebook';
+                case 'linkedin': return 'fab fa-linkedin';
+                case 'github': return 'fab fa-github';
+                case 'youtube': return 'fab fa-youtube';
+                case 'website': return 'fas fa-globe';
+                case 'reddit': return 'fab fa-reddit';
+                case 'tiktok': return 'fab fa-tiktok';
+                case 'discord': return 'fab fa-discord';
+                case 'twitch': return 'fab fa-twitch';
+                default: return 'fas fa-link';
+            }
+        }
+        
+        function showLoginError(message) {
+            const errorElement = document.getElementById('login-error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => errorElement.style.display = 'none', 3000);
+        }
+        </script>
+    </body>
+</html>
